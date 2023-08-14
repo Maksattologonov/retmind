@@ -1,0 +1,27 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    image: redis:latest
+
+  web:
+    build: .
+    volumes:
+      - .:/TestShop
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DJANGO_DB_HOST: postgres
+      DJANGO_DB_NAME: ${POSTGRES_DB}
+      DJANGO_DB_USER: ${POSTGRES_USER}
+      DJANGO_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DJANGO_REDIS_HOST: redis
